@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>Document Upload</title>
+    </head>
+    <body>
+        <h1>Document Upload With Database</h1>
+        <form action="javascript:void(0);" id="uploadForm" enctype="multipart/form-data">
+            
+            <label>Enter Your Document: </label> <input id="document" type="file" name="document">
+            <input class="btn btn-success documentSubmit" type="submit">
+            <h4 class="notice"></h4>
+        </form>
+    </body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$('#uploadForm').submit(function() {
+    $(".notice").empty().text("File is uploading...");
+    var form_data = new FormData($('#uploadForm')[0]);
+    var verify = $('#document').val();
+    if(verify){
+        //alert(form_data)
+        $.ajax({
+            method: 'post',
+            url: '/document_upload',
+            dataType: 'json',
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data){
+                $('.notice').html(data[0].result);
+            },
+            error: function(err){
+                $('.notice').text(err[0]);
+            }
+        })
+    }else{
+        $('.notice').text('Upload document!');
+    }
+    
+});
+</script>
